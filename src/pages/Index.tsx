@@ -77,11 +77,15 @@ const nodeResourcesData = [
   { name: 'Node 5', cpu: 55, memory: 59 },
 ];
 
+// Transformed pod distribution data for stacked chart visualization
 const podDistributionData = [
-  { name: 'Running', value: 48 },
-  { name: 'Pending', value: 5 },
-  { name: 'Failed', value: 2 },
-  { name: 'Completed', value: 12 },
+  { 
+    name: 'Pods',
+    Running: 48,
+    Pending: 5,
+    Failed: 2,
+    Completed: 12
+  }
 ];
 
 const Index = () => {
@@ -133,7 +137,7 @@ const Index = () => {
               <ResourceChart
                 title="Pod Distribution"
                 description="Status breakdown"
-                type="pie"
+                type="stacked"
                 data={podDistributionData}
                 className="col-span-1 animate-fade-in"
               />
@@ -142,14 +146,11 @@ const Index = () => {
             <div>
               <h2 className="text-xl font-semibold mb-4">Your Clusters</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {mockClusters.map((cluster, index) => (
+                {mockClusters.map((cluster) => (
                   <ClusterCard 
                     key={cluster.id} 
                     {...cluster} 
-                    className={`animate-fade-in`}
-                    style={{
-                      animationDelay: `${index * 75}ms`
-                    }}
+                    className="animate-fade-in"
                   />
                 ))}
               </div>

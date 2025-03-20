@@ -14,13 +14,15 @@ import {
   Legend,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  StackedBarChart,
+  ComposedChart
 } from 'recharts';
 
 interface ResourceChartProps {
   title: string;
   description?: string;
-  type: 'area' | 'bar' | 'pie';
+  type: 'area' | 'bar' | 'pie' | 'stacked';
   data: any[];
   className?: string;
 }
@@ -115,6 +117,53 @@ const ResourceChart: React.FC<ResourceChartProps> = ({
               <Bar dataKey="cpu" fill="#326CE5" radius={[4, 4, 0, 0]} barSize={20} />
               <Bar dataKey="memory" fill="#00C48C" radius={[4, 4, 0, 0]} barSize={20} />
             </BarChart>
+          </ResponsiveContainer>
+        );
+        
+      case 'stacked':
+        return (
+          <ResponsiveContainer width="100%" height={200}>
+            <ComposedChart
+              data={data}
+              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+              <XAxis 
+                dataKey="name" 
+                tick={{ fontSize: 10 }} 
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis 
+                tick={{ fontSize: 10 }} 
+                tickLine={false} 
+                axisLine={false}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  borderRadius: 8, 
+                  border: 'none', 
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' 
+                }} 
+              />
+              <Legend 
+                iconType="circle" 
+                iconSize={8} 
+                wrapperStyle={{ fontSize: 10, paddingTop: 10 }}
+              />
+              {data.length > 0 && Object.keys(data[0])
+                .filter(key => key !== 'name')
+                .map((key, index) => (
+                  <Bar 
+                    key={key}
+                    dataKey={key} 
+                    stackId="a" 
+                    fill={COLORS[index % COLORS.length]} 
+                    radius={index === 0 ? [4, 4, 0, 0] : [0, 0, 0, 0]}
+                  />
+                ))
+              }
+            </ComposedChart>
           </ResponsiveContainer>
         );
         
